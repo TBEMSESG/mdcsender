@@ -1,6 +1,8 @@
 const { SerialPort } = require('serialport')
 const axios = require('axios');
 
+require('./Middelware/sendMdc')();
+
 //define the Power meter (in this case a Shelly em3). The endpoitn may vary depending on the device. 
 //The Ip is to be defined. maybe it is possible to work with dns entries like shelly.local to have a standard? 
 const shelly = 'http://10.10.99.134/'
