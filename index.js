@@ -8,6 +8,11 @@ const endpoint = 'status/';
 // Define the threshold under which the screen has to be turned off (in Watt)
 const threshold = 600;
 
+//Define settings for MDC via RJ45  
+    const port = 1515;
+    //Define the Ip addresses of the screens to control
+	const hosts = [ '192.168.11.80','192.168.11.81' ]
+
 //Reads the current state of the measurement and triggers changes to the screens
 function readShelly() {
     axios.get(shelly + endpoint)
