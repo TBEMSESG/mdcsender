@@ -8,18 +8,18 @@ function sendRj(num, hosts, port, hex) {
 		console.log(obj);
 		obj = new Net.Socket();
 		obj.connect({ port: port, host: hosts[num] } , () => {
-			console.log(`TCP connection established with the screen ${hosts[num]} `);
-			setTimeout( ()=> {
-				obj.write(hex,  () => {
-					obj.destroy();	
-				   console.log('wrote.')			
-				});
-			},200)			
-		});
+		console.log(`TCP connection established with the screen ${hosts[num]} `);
+		setTimeout( ()=> {
+			obj.write(hex,  () => {
+				obj.destroy();	
+			   console.log('wrote.')			
+		 		});
+		 	},200)			
+		 });
 		console.log('Stopping ', num );
     }, 200);
 }
 
 
-exports.sendMdcRj45 = sendRj
+exports.sendRj = sendRj
 
