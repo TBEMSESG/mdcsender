@@ -11,3 +11,8 @@ We used Powerconsumption, but every other sensor is possible to use, like a PIR 
 This app can be uses everywhere there is currently no "middleware" to control the screen, like a meeting room in which we only need the screen on if someone is in the room.
 
 Used hardware for this example: 
+Raspberry Pi 4
+![image](https://user-images.githubusercontent.com/50730110/198819268-f0a1cb19-1b82-447a-a4fe-9f02b5afb71c.png)
+
+Shelly em3
+![image](https://user-images.githubusercontent.com/50730110/198819286-d6e91a64-86b2-49b0-a8d5-9fdf895029f4.png)
