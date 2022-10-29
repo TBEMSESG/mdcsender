@@ -14,6 +14,10 @@ const interval = 10000; //defines how often Power is checked and changes trigger
 
 let panelStatus = 0;  //defines the current status of the Panel, not to turn on an already running panel starts at 0 at script first run
 
+//Define if using RJ45 or Serial or Both
+//possible values "ethernet", "serial" or "both"
+let connectionType = 'ethernet';
+
 //Define settings for MDC via RJ45  
 const port = 1515;
 //Define the Ip addresses of the screens to control
