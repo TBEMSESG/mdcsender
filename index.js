@@ -10,17 +10,20 @@ const shelly = 'http://10.10.99.134/'
 const endpoint = 'status/';
 // Define the threshold under which the screen has to be turned off (in Watt)
 const threshold = 600;
+const interval = 10000; //defines how often Power is checked and changes triggered (in ms)
+
+let panelStatus = 0;  //defines the current status of the Panel, not to turn on an already running panel starts at 0 at script first run
 
 //Define settings for MDC via RJ45  
-    const port = 1515;
-    //Define the Ip addresses of the screens to control
-	const hosts = [ '192.168.11.80','192.168.11.81' ]
+const port = 1515;
+//Define the Ip addresses of the screens to control
+const hosts = [ '192.168.11.80','192.168.11.81' ]
 
 //Define the MDC Commands to send
-    const poweronToSend = [0xAA, 0x11, 0xFE, 0x01, 0x01, 0x11]
-    var poweronhex = new Uint8Array(poweronToSend);
-    const poweroffToSend = [0xAA, 0x11, 0xFE, 0x01, 0x00, 0x10]
-    var poweroffhex = new Uint8Array(poweroffToSend);
+const poweronToSend = [0xAA, 0x11, 0xFE, 0x01, 0x01, 0x11]
+var poweronhex = new Uint8Array(poweronToSend);
+const poweroffToSend = [0xAA, 0x11, 0xFE, 0x01, 0x00, 0x10]
+var poweroffhex = new Uint8Array(poweroffToSend);
 
 //Reads the current state of the measurement and triggers changes to the screens
 function readShelly() {
@@ -37,15 +40,26 @@ function readShelly() {
         
         if (total <= threshold) {
             console.log(`total: ${total} - Total is fine, Lights are off`)
-            //Call the MDC function to turn the screen OFF
-            // for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweroffhex)  };
+            console.log(panelStatus)
+
+            if (panelStatus === 1)  {         
+                //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweroffhex)  };
+                console.log('running Turn off Command')
+                panelStatus = 0;
+                }
+                else console.log('panel is already off');
         }
 
         if (total > threshold) {
             console.log(`total: ${total} - Total is High, Lights are ON`)
+            console.log(panelStatus)
             //Call the MDC function to turn the screen ON , uncomment next line to activate
-            // for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweronhex)  };
-            
+            if (panelStatus === 0)  {         
+                //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweronhex)  };
+                console.log('running Turn on Command')
+                panelStatus = 1;
+                }
+                else console.log('panel is already on');
         }
     })
     .catch(function (error) {
@@ -57,18 +71,12 @@ function readShelly() {
     });
 }
 
+// timer() runs the powercheck at given interval (can be changed in settings) 
 function timer (){ 
         readShelly();
-        timing = setTimeout(timer, 5000)
+        timing = setTimeout(timer, interval)
 }
 timer();
-
-
-
-function sendMDCOn(){
-
-
-}
 
 
 // function sendCode(msg) { 
