@@ -47,11 +47,20 @@ function readShelly() {
             console.log(panelStatus)
 
             if (panelStatus === 1)  {         
-                //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweroffhex)  };
-                console.log('running Turn off Command')
-                panelStatus = 0;
+                if (connectionType == 'ethernet' || connectionType == 'both') {
+                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweroffhex)  };
+                    console.log('running Turn off Command RJ45')
+                    panelStatus = 0;
                 }
-                else console.log('panel is already off');
+
+                if (connectionType == 'serial' || connectionType == 'both') {
+                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweroffhex)  };
+                    console.log('running Turn off Command Serial')
+                    panelStatus = 0;
+                }
+            }
+            else console.log('panel is already off');
+        
         }
 
         if (total > threshold) {
@@ -59,11 +68,20 @@ function readShelly() {
             console.log(panelStatus)
             //Call the MDC function to turn the screen ON , uncomment next line to activate
             if (panelStatus === 0)  {         
-                //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweronhex)  };
-                console.log('running Turn on Command')
-                panelStatus = 1;
+                if (connectionType == 'ethernet' || connectionType == 'both') {
+                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweronhex)  };
+                    console.log('running Turn ON Command RJ45')
+                    panelStatus = 1;
                 }
-                else console.log('panel is already on');
+
+                if (connectionType == 'serial' || connectionType == 'both') {
+                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, poweronhex)  };
+                    console.log('running Turn ON Command Serial')
+                    panelStatus = 1;
+                }
+                
+            }
+            else console.log('panel is already on');
         }
     })
     .catch(function (error) {
