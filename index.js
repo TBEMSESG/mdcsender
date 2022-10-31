@@ -43,7 +43,7 @@ function readShelly() {
 
         
         if (total <= threshold) {
-            console.log(`total: ${total} - Total is fine, Lights are off`)
+            console.log(`total: ${total} - Total is Low, Lights are off`)
             console.log(panelStatus)
 
             if (panelStatus === 1)  {         

@@ -1,4 +1,5 @@
 const Net = require('net');
+const { SerialPort } = require('serialport')
 
 
 function sendRj(num, hosts, port, hex) {
@@ -20,6 +21,44 @@ function sendRj(num, hosts, port, hex) {
     }, 200);
 }
 
+//just for Test, to remove afterwards
+const paneloffToSend = [0xAA, 0xF9, 0x01, 0x01, 0x01, 0xFB]
+var paneloffhex = new Uint8Array(paneloffToSend);
+let cmd = Buffer.from(paneloffToSend)
+
+function sendCode(msg) { 
+    // Create a port
+     const port = new SerialPort({
+     path: '/dev/ttyAMA0',
+     baudRate: 9600, autoOpen: true,
+	 databits: 8,
+parity: 'none'
+     })
+
+		port.write(msg, function(err) {
+			if (err) {
+			return console.log('Error on write: ', err.message)
+			}
+			console.log('message written')
+		})
+
+
+		port.on('readable', function () {
+			console.log('Response:', port.read())
+		  })
+		  
+		  // Switches the port into "flowing mode"
+		  //port.on('data', function (data) {
+		//	console.log('Data:', data)
+		//  })
+    
+     // Open errors will be emitted as an error event
+     port.on('error', function(err) {
+         console.log('ee: ', err.message)
+     })
+ };
+
+sendCode(cmd)
 
 exports.sendRj = sendRj
 
