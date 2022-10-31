@@ -22,7 +22,7 @@ function sendRj(num, hosts, port, hex) {
 }
 
 //just for Test, to remove afterwards
-const paneloffToSend = [0xAA, 0xF9, 0x01, 0x01, 0x01, 0xFB]
+const paneloffToSend = [0xAA, 0xF9, 0xFE, 0x01, 0x01, 0xF9]
 var paneloffhex = new Uint8Array(paneloffToSend);
 let cmd = Buffer.from(paneloffToSend)
 
@@ -30,9 +30,10 @@ function sendCode(msg) {
     // Create a port
      const port = new SerialPort({
      path: '/dev/ttyAMA0',
-     baudRate: 9600, autoOpen: true,
-	 databits: 8,
-parity: 'none'
+     baudRate: 9600,
+	 dataBits: 8,
+	 stopBits: 1,
+	 parity: 'none', 
      })
 
 		port.write(msg, function(err) {
@@ -58,7 +59,7 @@ parity: 'none'
      })
  };
 
-sendCode(cmd)
+sendCode(paneloffhex)
 
 exports.sendRj = sendRj
 
