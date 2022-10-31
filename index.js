@@ -9,7 +9,7 @@ require('./Middleware/sendMdc');
 const shelly = 'http://10.10.99.134/'
 const endpoint = 'status/';
 // Define the threshold under which the screen has to be turned off (in Watt)
-const threshold = 600;
+const threshold = 620;
 const interval = 10000; //defines how often Power is checked and changes triggered (in ms)
 
 let panelStatus = 0;  //defines the current status of the Panel, not to turn on an already running panel starts at 0 at script first run
@@ -21,12 +21,12 @@ let connectionType = 'ethernet';
 //Define settings for MDC via RJ45  
 const port = 1515;
 //Define the Ip addresses of the screens to control
-const hosts = [ '192.168.11.80','192.168.11.81' ]
+const hosts = [ '10.10.10.149']
 
 //Define the MDC Commands to send
-const panelonToSend = [0xAA, 0xF9, 0xFE, 0x01, 0x01, 0xF9]
+const panelonToSend = [0xAA, 0xF9, 0xFE, 0x01, 0x00, 0xF8]
 var panelonhex = new Uint8Array(panelonToSend);
-const paneloffToSend = [0xAA, 0xF9, 0xFE, 0x01, 0x00, 0xF8]
+const paneloffToSend = [0xAA, 0xF9, 0xFE, 0x01, 0x01, 0xF9]
 var paneloffhex = new Uint8Array(paneloffToSend);
 
 //Reads the current state of the measurement and triggers changes to the screens
@@ -48,7 +48,7 @@ function readShelly() {
 
             if (panelStatus === 1)  {         
                 if (connectionType == 'ethernet' || connectionType == 'both') {
-                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
+                    for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
                     console.log('running Turn off Command RJ45')
                     panelStatus = 0;
                 }
@@ -69,7 +69,7 @@ function readShelly() {
             //Call the MDC function to turn the screen ON , uncomment next line to activate
             if (panelStatus === 0)  {         
                 if (connectionType == 'ethernet' || connectionType == 'both') {
-                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, panelonhex)  };
+                    for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, panelonhex)  };
                     console.log('running Turn ON Command RJ45')
                     panelStatus = 1;
                 }
