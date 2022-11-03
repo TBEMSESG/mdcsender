@@ -10,7 +10,7 @@ const shelly = 'http://10.10.99.134/'
 const endpoint = 'status/';
 // Define the threshold under which the screen has to be turned off (in Watt)
 const threshold = 620;
-const interval = 10000; //defines how often Power is checked and changes triggered (in ms)
+const interval = 2000; //defines how often Power is checked and changes triggered (in ms)
 
 let panelStatus = 0;  //defines the current status of the Panel, not to turn on an already running panel starts at 0 at script first run
 
@@ -20,14 +20,70 @@ let connectionType = 'ethernet';
 
 //Define settings for MDC via RJ45  
 const port = 1515;
-//Define the Ip addresses of the screens to control
-const hosts = [ '10.10.10.149']
+
+const hosts = [ '192.168.10.48']; //Define the Ip addresses of the screens to control
+const motionSensor = 'http://192.168.10.79/'; // In this case a shelly Movement Sensor
+const motionEndpoint = 'status';
 
 //Define the MDC Commands to send
 const panelonToSend = [0xAA, 0xF9, 0xFE, 0x01, 0x00, 0xF8]
 var panelonhex = new Uint8Array(panelonToSend);
 const paneloffToSend = [0xAA, 0xF9, 0xFE, 0x01, 0x01, 0xF9]
 var paneloffhex = new Uint8Array(paneloffToSend);
+
+
+function readMovement(){
+    axios.get(motionSensor + motionEndpoint)
+    .then(function (response) {
+        // handle success
+        var motion = response.data.sensor.motion;
+        
+        if  (motion == false) {
+            
+            if (panelStatus === 1)  {         
+                if (connectionType == 'ethernet' || connectionType == 'both') {
+                    for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
+                    console.log('running Turn off Command RJ45')
+                    panelStatus = 0;
+                }
+
+                if (connectionType == 'serial' || connectionType == 'both') {
+                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
+                    console.log('running Turn off Command Serial')
+                    panelStatus = 0;
+                }
+            }
+            else console.log('panel is already off');            
+        }
+
+        if  (motion == true) {
+            
+            if (panelStatus === 0)  {         
+                if (connectionType == 'ethernet' || connectionType == 'both') {
+                    for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, panelonhex)  };
+                    console.log('running Turn On Command RJ45')
+                    panelStatus = 1;
+                }
+
+                if (connectionType == 'serial' || connectionType == 'both') {
+                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
+                    console.log('running Turn On Command Serial')
+                    panelStatus = 1;
+                }
+            }
+            else console.log('panel is already on');            
+        }
+
+    })
+    .catch(function (error) {
+          // handle error
+        console.log('Our Error is : ', error);
+    })
+    .finally(function () {
+        // always executed
+    })
+};
+
 
 //Reads the current state of the measurement and triggers changes to the screens
 function readShelly() {
@@ -95,9 +151,10 @@ function readShelly() {
 
 // timer() runs the powercheck at given interval (can be changed in settings) 
 function timer (){ 
-        readShelly();
+  //      readShelly();
+        readMovement();
         timing = setTimeout(timer, interval)
-}
+        }
 timer();
 
 
