@@ -21,7 +21,7 @@ function sendRj(num, hosts, port, hex) {
 }
 
 //just for Test, to remove afterwards
-const paneloffToSend = [0xAA, 0xF9, 0xFE, 0x01, 0x01, 0xF9]
+const paneloffToSend = [0xAA, 0xF9, 0xFE, 0x01, 0x00, 0xF8]
 var paneloffhex = new Uint8Array(paneloffToSend);
 let cmd = Buffer.from(paneloffToSend)
 
@@ -40,6 +40,9 @@ function sendCode(msg) {
 			return console.log('Error on write: ', err.message)
 			}
 			console.log('message written')
+			port.close(function () {
+				     console.log('port Closed.');
+				 });
 		})
 
 
@@ -48,9 +51,9 @@ function sendCode(msg) {
 		  })
 		  
 		  // Switches the port into "flowing mode"
-		  //port.on('data', function (data) {
-		//	console.log('Data:', data)
-		//  })
+		port.on('data', function (data) {
+		console.log('Data:', data)
+		 })
     
      // Open errors will be emitted as an error event
      port.on('error', function(err) {
@@ -58,7 +61,8 @@ function sendCode(msg) {
      })
  };
 
-// sendCode(paneloffhex)
+//sendCode(paneloffhex)
 
 exports.sendRj = sendRj
+exports.sendcode = sendCode
 

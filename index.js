@@ -1,7 +1,7 @@
 const { SerialPort } = require('serialport')
 const axios = require('axios');
 const { sendRj } = require('./Middleware/sendMdc');
-
+const { sendcode } = require('./Middleware/sendMdc');
 require('./Middleware/sendMdc');
 
 
@@ -13,20 +13,20 @@ require('./Middleware/sendMdc');
 const shelly = 'http://10.10.99.134/'
 const endpoint = 'status/';
 // Define the threshold under which the screen has to be turned off (in Watt)
-const threshold = 620;
+const threshold = 450;
 const interval = 5000; //defines how often Power is checked and changes triggered (in ms)
 
 let panelStatus = 0;  //defines the current status of the Panel, not to turn on an already running panel starts at 0 at script first run
 
 //Define if using RJ45 or Serial or Both
 //possible values "ethernet", "serial" or "both"
-let connectionType = 'ethernet';
+let connectionType = 'serial';
 
 //Define settings for MDC via RJ45  
 const port = 1515;
 
 const hosts = [ '192.168.10.48']; //Define the Ip addresses of the screens to control
-const motionSensor = 'http://192.168.10.79/'; // In this case a shelly Movement Sensor
+const motionSensor = 'http://192.168.1.46/'; // In this case a shelly Movement Sensor
 const motionEndpoint = 'status';
 
 //Define the MDC Commands to send
@@ -52,7 +52,7 @@ function readMovement(){
                 }
 
                 if (connectionType == 'serial' || connectionType == 'both') {
-                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
+                    for (let i=0; i < hosts.length ; i++) { sendcode(paneloffhex)  };
                     console.log('running Turn off Command Serial')
                     panelStatus = 0;
                 }
@@ -70,7 +70,7 @@ function readMovement(){
                 }
 
                 if (connectionType == 'serial' || connectionType == 'both') {
-                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
+                    for (let i=0; i < hosts.length ; i++) { sendcode(panelonhex)  };
                     console.log('running Turn On Command Serial')
                     panelStatus = 1;
                 }
@@ -104,7 +104,7 @@ function readLux(){
                 }
 
                 if (connectionType == 'serial' || connectionType == 'both') {
-                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
+                    for (let i=0; i < hosts.length ; i++) { sendcode(paneloffhex)  };
                     console.log('running Turn off Command Serial')
                     panelStatus = 0;
                 }
@@ -122,7 +122,7 @@ function readLux(){
                 }
 
                 if (connectionType == 'serial' || connectionType == 'both') {
-                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
+                    for (let i=0; i < hosts.length ; i++) { sendcode(panelonhex)  };
                     console.log('running Turn On Command Serial')
                     panelStatus = 1;
                 }
@@ -154,8 +154,8 @@ function readShelly() {
 
         
         if (total <= threshold) {
-            console.log(`total: ${total} - Total is Low, Lights are off`)
-            console.log(panelStatus)
+            //console.log(`total: ${total} - Total is Low, Lights are off`)
+            //console.log(panelStatus)
 
             if (panelStatus === 1)  {         
                 if (connectionType == 'ethernet' || connectionType == 'both') {
@@ -165,7 +165,7 @@ function readShelly() {
                 }
 
                 if (connectionType == 'serial' || connectionType == 'both') {
-                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, paneloffhex)  };
+                    for (let i=0; i < hosts.length ; i++) { sendcode(paneloffhex)  };
                     console.log('running Turn off Command Serial')
                     panelStatus = 0;
                 }
@@ -175,8 +175,8 @@ function readShelly() {
         }
 
         if (total > threshold) {
-            console.log(`total: ${total} - Total is High, Lights are ON`)
-            console.log(panelStatus)
+            //console.log(`total: ${total} - Total is High, Lights are ON`)
+            //console.log(panelStatus)
             //Call the MDC function to turn the screen ON , uncomment next line to activate
             if (panelStatus === 0)  {         
                 if (connectionType == 'ethernet' || connectionType == 'both') {
@@ -186,7 +186,7 @@ function readShelly() {
                 }
 
                 if (connectionType == 'serial' || connectionType == 'both') {
-                    //for (let i=0; i < hosts.length ; i++) { sendRj(i,hosts, port, panelonhex)  };
+                    for (let i=0; i < hosts.length ; i++) { sendcode(panelonhex)  };
                     console.log('running Turn ON Command Serial')
                     panelStatus = 1;
                 }
@@ -206,32 +206,10 @@ function readShelly() {
 
 // timer() runs the powercheck at given interval (can be changed in settings) 
 function timer (){ 
-        readLux(); //Uncomment to have the brightness triggering On or Off
-        // readShelly(); //Uncomment to have the Power consumption measured
-        //readMovement(); //Uncomment to have the movement triggering On or Off
+        //readLux(); //Uncomment to have the brightness triggering On or Off
+        //readShelly(); //Uncomment to have the Power consumption measured
+        readMovement(); //Uncomment to have the movement triggering On or Off
         timing = setTimeout(timer, interval)
         }
 timer();
-
-
-// function sendCode(msg) { 
-//     // Create a port
-//     const port = new SerialPort({
-//     path: '/dev/ttyAMA0',
-//     baudRate: 9600,
-//     })
-
-
-//     port.write(msg, function(err) {
-//         if (err) {
-//         return console.log('Error on write: ', err.message)
-//         }
-//         console.log('message written')
-//     })
-    
-//     // Open errors will be emitted as an error event
-//     port.on('error', function(err) {
-//         console.log('Error: ', err.message)
-//     })
-// };
 
