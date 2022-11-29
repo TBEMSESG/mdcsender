@@ -1,5 +1,11 @@
 # mdcsender
 
+
+*Not for Productive environements - only for proof of concept - No warranty - no support*
+
+
+
+
 Send MDC commands to a Samsung b2b Device
 
 This app ready data from an external APi to trigger Panel on or Panel off for one or more screens
