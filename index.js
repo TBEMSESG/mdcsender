@@ -149,6 +149,7 @@ function readVibration(){
 };
 
 
+// Reads the current Ambient light
 function readLux(){
     axios.get(motionSensor + motionEndpoint)
     .then(function (response) {
