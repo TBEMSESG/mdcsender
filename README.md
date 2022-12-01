@@ -24,6 +24,11 @@ Raspberry Pi 4
 https://www.digitec.ch/de/s1/product/raspberry-pi-4-2g-model-b-armv8-entwicklungsboard-kit-11267870
 ![image](https://user-images.githubusercontent.com/50730110/198819268-f0a1cb19-1b82-447a-a4fe-9f02b5afb71c.png)
 
+Shelly 2.5
+https://www.digitec.ch/de/s1/product/shelly-wlan-schaltaktor-25-automatisierung-13171777
+![image](https://user-images.githubusercontent.com/50730110/205022478-fbdd2a47-757b-495a-a174-0c507d28cf9c.png)
+
+
 Shelly em3
 
 https://www.digitec.ch/de/s1/product/shelly-3em-energiemessgeraet-13175233
