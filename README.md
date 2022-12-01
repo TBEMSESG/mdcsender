@@ -1,22 +1,23 @@
 # mdcsender
 
 
-*Not for Productive environements - only for proof of concept - No warranty - no support*
+*Not for Productive environments - only for proof of concept - No warranty - no support*
 
 
 
 
 Send MDC commands to a Samsung b2b Device
 
-This app ready data from an external APi to trigger Panel on or Panel off for one or more screens
+This app ready data from an external API to trigger Panel on or Panel off for one or more screens
 The app uses MDC over RJ45 and/or Serial
 
-In the case of this example, an external power meter is used to read current power consumption (eg. a lamp). If the power consumption is under a configurabel threshold, the Panel of the screen is turned off.
-We used Powerconsumption, but every other sensor is possible to use, like a PIR or ambient light sensor.
+In the case of this example, an external power meter is used to read current power consumption (eg. a lamp). If the power consumption is under a configurable threshold, the Panel of the screen is turned off.
+We used Power consumption, but every other sensor is possible to use, like a PIR or ambient light sensor.
 
-This node.js app can be uses everywhere where there is currently no "middleware" to control the screen, like a meeting room in which we only need the screen on if someone is in the room.
+This node.js app can be used everywhere where there is currently no "middleware" to control the screen, like a meeting room in which we only need the screen on if someone is in the room.
 
 Used hardware for this example: (this is only for reference, you can use every node.js running tool and every API providing sensor.
+
 
 
 Raspberry Pi 4
